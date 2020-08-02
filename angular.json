@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/screenshare",
+            "outputPath": "dist/",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -21,7 +21,12 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "src/app/screenshare/assets",
+                "output": "/assets"
+              }
             ],
             "styles": [
               "src/styles.css"
@@ -119,6 +124,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "screenshare"
+    }
+  },
+  "defaultProject": "screenshare",
+  "cli": {
+    "analytics": false
+  }
 }

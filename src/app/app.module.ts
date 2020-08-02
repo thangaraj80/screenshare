@@ -3,10 +3,12 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ScreenshareComponent } from './screenshare/screenshare.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ScreenshareComponent
   ],
   imports: [
     BrowserModule,
