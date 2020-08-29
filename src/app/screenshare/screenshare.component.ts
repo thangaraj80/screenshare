@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import * as io from 'socket.io-client';
-import * as RTCMultiConnection from "./assets/js/RTCMultiConnection.js"
-import adapter from 'webrtc-adapter';
 
-import * as getHTMLMediaElement from "./assets/js/dev/getHTMLMediaElement";
+import * as RTCMultiConnection from "./assets/js/RTCMultiConnection.js"
 import * as DetectRTC from "./assets/DetectRTC.js";
+import * as getHTMLMediaElement from "./assets/js/dev/getHTMLMediaElement";
+
 // import *  "./assets/conference.js"
 
 @Component({
@@ -24,52 +23,52 @@ export class ScreenshareComponent implements OnInit {
         screen: null,
         selfVideo: null
     };
-    socket: io.Socket;
-    connection: RTCMultiConnection;
+
+    connection;
     shareBtnDisable: boolean = true
     constructor() {
 
     }
 
     ngOnInit(): void {
-        console.log(this.socket)
-        this.navigator = window.navigator;
+
         // ......................................................
         // ..................RTCMultiConnection Code.............
         // ......................................................
-        const btnShareScreen = document.getElementById('share-screen');
+
         this.connection = new RTCMultiConnection();
 
         // by default, socket.io server is assumed to be deployed on your own URL
-        // this.connection.socketURL = '/';
+        //  this.connection.socketURL = '/';
         // comment-out below line if you do not have your own socket.io server
         this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
         this.connection.socketMessageEvent = 'video-screen-demo';
         this.connection.session = {
-            audio: true,
-            video: true
+            screen: true,
+            oneway: true
+            // isScreen: true
         };
         this.connection.sdpConstraints.mandatory = {
-            OfferToReceiveAudio: true,
-            OfferToReceiveVideo: true
+            OfferToReceiveAudio: false,
+            OfferToReceiveVideo: false
         };
 
         // https://www.rtcmulticonnection.org/docs/iceServers/
         // use your own TURN-server here!
         this.connection.iceServers = [{
-            'urls': ['https://www.rtcmulticonnection.org/docs/iceServers/']
-            /*'urls': [
+            //'urls': ['https://www.rtcmulticonnection.org/docs/iceServers/']
+            'urls': [
                 'stun:stun.l.google.com:19302',
                 'stun:stun1.l.google.com:19302',
                 'stun:stun2.l.google.com:19302',
                 'stun:stun.l.google.com:19302?transport=udp',
-            ]*/
+            ]
         }];
 
         this.connection.videosContainer = document.getElementById('videos-container');
 
-        this.connection.onstream = function (event) {
-            var existing = document.getElementById(event.streamid);
+        this.connection.onstream = (event) => {
+            const existing = document.getElementById(event.streamid);
             if (existing && existing.parentNode) {
                 existing.parentNode.removeChild(existing);
             }
@@ -79,14 +78,14 @@ export class ScreenshareComponent implements OnInit {
             event.mediaElement.muted = true;
             event.mediaElement.volume = 0;
 
-            var video = document.createElement('video');
+            const video = document.createElement('video');
 
             try {
                 video.setAttributeNode(document.createAttribute('autoplay'));
                 video.setAttributeNode(document.createAttribute('playsinline'));
             } catch (e) {
-                //    video.setAttribute('autoplay', true);
-                //  video.setAttribute('playsinline', true);
+                video.setAttribute('autoplay', "true");
+                video.setAttribute('playsinline', "true");
             }
 
             if (event.type === 'local') {
@@ -94,13 +93,13 @@ export class ScreenshareComponent implements OnInit {
                 try {
                     video.setAttributeNode(document.createAttribute('muted'));
                 } catch (e) {
-                    //  video.setAttribute('muted', true);
+                    video.setAttribute('muted', "true");
                 }
             }
             video.srcObject = event.stream;
 
-            var width = innerWidth - 80;
-            var mediaElement = getHTMLMediaElement(video, {
+            const width = innerWidth - 80;
+            const mediaElement = getHTMLMediaElement.getHTMLMediaElement(video, {
                 title: event.userid,
                 buttons: ['full-screen'],
                 width: width,
@@ -109,14 +108,14 @@ export class ScreenshareComponent implements OnInit {
 
             this.connection.videosContainer.appendChild(mediaElement);
 
-            setTimeout(function () {
+            setTimeout(() => {
                 mediaElement.media.play();
             }, 5000);
 
             mediaElement.id = event.streamid;
         };
 
-        this.connection.onstreamended = function (event) {
+        this.connection.onstreamended = (event) => {
             var mediaElement = document.getElementById(event.streamid);
             if (mediaElement) {
                 mediaElement.parentNode.removeChild(mediaElement);
@@ -128,7 +127,7 @@ export class ScreenshareComponent implements OnInit {
             }
         };
 
-        this.connection.onMediaError = function (e) {
+        this.connection.onMediaError = (e) => {
             if (e.message === 'Concurrent mic process limit.') {
                 if (DetectRTC.audioInputDevices.length <= 1) {
                     alert('Please select external microphone. Check github issue number 483.');
@@ -143,7 +142,17 @@ export class ScreenshareComponent implements OnInit {
                 this.connection.join(this.connection.sessionid);
             }
         };
-        const params: any = {}
+        const params: any = {},
+            r = /([^&=]+)=?([^&]*)/g;
+
+        function d(s) {
+            return decodeURIComponent(s.replace(/\+/g, ' '));
+        }
+        var match, search = window.location.search;
+        while (match = r.exec(search.substring(1)))
+            params[d(match[1])] = d(match[2]);
+        // window.params = params;
+
         let roomid = '';
         if (localStorage.getItem(this.connection.socketMessageEvent)) {
             roomid = localStorage.getItem(this.connection.socketMessageEvent);
@@ -151,10 +160,8 @@ export class ScreenshareComponent implements OnInit {
             roomid = this.connection.token();
         }
         this.roomId.nativeElement.value = roomid;
-        const conn = this.connection
-        const rId = this.roomId
-        this.roomId.nativeElement.onkeyup = function () {
-            localStorage.setItem(conn.socketMessageEvent, rId.nativeElement.value);
+        this.roomId.nativeElement.onkeyup = () => {
+            localStorage.setItem(this.connection.socketMessageEvent, this.roomId.nativeElement.value);
         };
 
         let hashString = location.hash.replace('#', '');
@@ -173,7 +180,7 @@ export class ScreenshareComponent implements OnInit {
 
             // auto-join-room
             (function reCheckRoomPresence() {
-                this.connection.checkPresence(roomid, function (isRoomExist) {
+                this.connection.checkPresence(roomid, (isRoomExist) => {
                     if (isRoomExist) {
                         this.connection.join(roomid);
                         return;
@@ -186,17 +193,17 @@ export class ScreenshareComponent implements OnInit {
             this.disableInputButtons();
         }
 
-        // detect 2G
+        /* detect 2G
         if (this.navigator.connection &&
             this.navigator.connection.type === 'cellular' &&
             this.navigator.connection.downlinkMax <= 0.115) {
             alert('2G is not supported. Please use a better internet service.');
-        }
+        }*/
     }
 
-    openRoom() {
+    openRoom(e) {
         this.disableInputButtons();
-        this.connection.open(this.roomId.nativeElement.value, function () {
+        this.connection.open(this.roomId.nativeElement.value, () => {
             this.showRoomURL(this.connection.sessionid);
         });
     };
@@ -213,7 +220,7 @@ export class ScreenshareComponent implements OnInit {
 
     openRjoinRoom = () => {
         this.disableInputButtons();
-        this.connection.openOrJoin(this.roomId.nativeElement.value, function (isRoomExist, roomid) {
+        this.connection.openOrJoin(this.roomId.nativeElement.value, (isRoomExist, roomid) => {
             if (isRoomExist === false && this.connection.isInitiator === true) {
                 // if room doesn't exist, it means that current user will create the room
                 this.showRoomURL(roomid);
@@ -236,7 +243,7 @@ export class ScreenshareComponent implements OnInit {
         html += '<br>';
         html += 'QueryString URL: <a href="' + roomQueryStringURL + '" target="_blank">' + roomQueryStringURL + '</a>';
         const roomURLsDiv = document.getElementById('room-urls');
-        this.roomURLsDiv.nativeElement.value = html;
+        this.roomURLsDiv.nativeElement.innerHTML = html;
         this.roomURLsDiv.nativeElement.style.display = 'block';
     }
     disableInputButtons = () => {

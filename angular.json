@@ -95,6 +95,7 @@
               "src/assets"
             ],
             "styles": [
+              "assets/js/dev/getHTMLMediaElement.css",
               "src/styles.css"
             ],
             "scripts": []

@@ -32,12 +32,12 @@ function getHTMLMediaElement(mediaElement, config) {
     }
 
     var buttons = config.buttons || ['mute-audio', 'mute-video', 'full-screen', 'volume-slider', 'stop'];
-    buttons.has = function(element) {
+    buttons.has = function (element) {
         return buttons.indexOf(element) !== -1;
     };
 
     config.toggle = config.toggle || [];
-    config.toggle.has = function(element) {
+    config.toggle.has = function (element) {
         return config.toggle.indexOf(element) !== -1;
     };
 
@@ -53,7 +53,7 @@ function getHTMLMediaElement(mediaElement, config) {
         muteAudio.className = 'control ' + (config.toggle.has('mute-audio') ? 'unmute-audio selected' : 'mute-audio');
         mediaControls.appendChild(muteAudio);
 
-        muteAudio.onclick = function() {
+        muteAudio.onclick = function () {
             if (muteAudio.className.indexOf('unmute-audio') != -1) {
                 muteAudio.className = muteAudio.className.replace('unmute-audio selected', 'mute-audio');
                 mediaElement.muted = false;
@@ -73,7 +73,7 @@ function getHTMLMediaElement(mediaElement, config) {
         muteVideo.className = 'control ' + (config.toggle.has('mute-video') ? 'unmute-video selected' : 'mute-video');
         mediaControls.appendChild(muteVideo);
 
-        muteVideo.onclick = function() {
+        muteVideo.onclick = function () {
             if (muteVideo.className.indexOf('unmute-video') != -1) {
                 muteVideo.className = muteVideo.className.replace('unmute-video selected', 'mute-video');
                 mediaElement.muted = false;
@@ -95,7 +95,7 @@ function getHTMLMediaElement(mediaElement, config) {
         takeSnapshot.className = 'control take-snapshot';
         mediaControls.appendChild(takeSnapshot);
 
-        takeSnapshot.onclick = function() {
+        takeSnapshot.onclick = function () {
             if (config.onTakeSnapshot) config.onTakeSnapshot();
         };
     }
@@ -105,9 +105,9 @@ function getHTMLMediaElement(mediaElement, config) {
         stop.className = 'control stop';
         mediaControls.appendChild(stop);
 
-        stop.onclick = function() {
+        stop.onclick = function () {
             mediaElementContainer.style.opacity = 0;
-            setTimeout(function() {
+            setTimeout(function () {
                 if (mediaElementContainer.parentNode) {
                     mediaElementContainer.parentNode.removeChild(mediaElementContainer);
                 }
@@ -124,7 +124,7 @@ function getHTMLMediaElement(mediaElement, config) {
         recordAudio.className = 'control ' + (config.toggle.has('record-audio') ? 'stop-recording-audio selected' : 'record-audio');
         volumeControl.appendChild(recordAudio);
 
-        recordAudio.onclick = function() {
+        recordAudio.onclick = function () {
             if (recordAudio.className.indexOf('stop-recording-audio') != -1) {
                 recordAudio.className = recordAudio.className.replace('stop-recording-audio selected', 'record-audio');
                 if (config.onRecordingStopped) config.onRecordingStopped('audio');
@@ -140,7 +140,7 @@ function getHTMLMediaElement(mediaElement, config) {
         recordVideo.className = 'control ' + (config.toggle.has('record-video') ? 'stop-recording-video selected' : 'record-video');
         volumeControl.appendChild(recordVideo);
 
-        recordVideo.onclick = function() {
+        recordVideo.onclick = function () {
             if (recordVideo.className.indexOf('stop-recording-video') != -1) {
                 recordVideo.className = recordVideo.className.replace('stop-recording-video selected', 'record-video');
                 if (config.onRecordingStopped) config.onRecordingStopped('video');
@@ -161,7 +161,7 @@ function getHTMLMediaElement(mediaElement, config) {
         slider.min = 0;
         slider.max = 100;
         slider.value = 100;
-        slider.onchange = function() {
+        slider.onchange = function () {
             mediaElement.volume = '.' + slider.value.toString().substr(0, 1);
         };
         volumeSlider.appendChild(slider);
@@ -175,7 +175,7 @@ function getHTMLMediaElement(mediaElement, config) {
             mediaControls.insertBefore(zoom, mediaControls.firstChild);
         } else volumeControl.appendChild(zoom);
 
-        zoom.onclick = function() {
+        zoom.onclick = function () {
             if (zoom.className.indexOf('zoom-out') != -1) {
                 zoom.className = zoom.className.replace('zoom-out selected', 'zoom-in');
                 exitFullScreen();
@@ -286,20 +286,20 @@ function getHTMLMediaElement(mediaElement, config) {
     }
 
     if (config.showOnMouseEnter || typeof config.showOnMouseEnter === 'undefined') {
-        mediaElementContainer.onmouseenter = mediaElementContainer.onmousedown = function() {
+        mediaElementContainer.onmouseenter = mediaElementContainer.onmousedown = function () {
             adjustControls();
             mediaControls.style.opacity = 1;
             volumeControl.style.opacity = 1;
         };
 
-        mediaElementContainer.onmouseleave = function() {
+        mediaElementContainer.onmouseleave = function () {
             mediaControls.style.opacity = 0;
             volumeControl.style.opacity = 0;
         };
     } else {
-        setTimeout(function() {
+        setTimeout(function () {
             adjustControls();
-            setTimeout(function() {
+            setTimeout(function () {
                 mediaControls.style.opacity = 1;
                 volumeControl.style.opacity = 1;
             }, 300);
@@ -308,7 +308,7 @@ function getHTMLMediaElement(mediaElement, config) {
 
     adjustControls();
 
-    mediaElementContainer.toggle = function(clasName) {
+    mediaElementContainer.toggle = function (clasName) {
         if (typeof clasName != 'string') {
             for (var i = 0; i < clasName.length; i++) {
                 mediaElementContainer.toggle(clasName[i]);
@@ -358,7 +358,7 @@ function getAudioElement(mediaElement, config) {
     }
 
     config.toggle = config.toggle || [];
-    config.toggle.has = function(element) {
+    config.toggle.has = function (element) {
         return config.toggle.indexOf(element) !== -1;
     };
 
@@ -375,7 +375,7 @@ function getAudioElement(mediaElement, config) {
 
     muteAudio.style['border-top-left-radius'] = '5px';
 
-    muteAudio.onclick = function() {
+    muteAudio.onclick = function () {
         if (muteAudio.className.indexOf('unmute-audio') != -1) {
             muteAudio.className = muteAudio.className.replace('unmute-audio selected', 'mute-audio');
             mediaElement.muted = false;
@@ -392,7 +392,7 @@ function getAudioElement(mediaElement, config) {
         recordAudio.className = 'control ' + (config.toggle.has('record-audio') ? 'stop-recording-audio selected' : 'record-audio');
         mediaControls.appendChild(recordAudio);
 
-        recordAudio.onclick = function() {
+        recordAudio.onclick = function () {
             if (recordAudio.className.indexOf('stop-recording-audio') != -1) {
                 recordAudio.className = recordAudio.className.replace('stop-recording-audio selected', 'record-audio');
                 if (config.onRecordingStopped) config.onRecordingStopped('audio');
@@ -420,7 +420,7 @@ function getAudioElement(mediaElement, config) {
     slider.min = 0;
     slider.max = 100;
     slider.value = 100;
-    slider.onchange = function() {
+    slider.onchange = function () {
         mediaElement.volume = '.' + slider.value.toString().substr(0, 1);
     };
     volumeSlider.appendChild(slider);
@@ -429,9 +429,9 @@ function getAudioElement(mediaElement, config) {
     stop.className = 'control stop';
     mediaControls.appendChild(stop);
 
-    stop.onclick = function() {
+    stop.onclick = function () {
         mediaElementContainer.style.opacity = 0;
-        setTimeout(function() {
+        setTimeout(function () {
             if (mediaElementContainer.parentNode) {
                 mediaElementContainer.parentNode.removeChild(mediaElementContainer);
             }
@@ -472,18 +472,18 @@ function getAudioElement(mediaElement, config) {
     }
 
     if (config.showOnMouseEnter || typeof config.showOnMouseEnter === 'undefined') {
-        mediaElementContainer.onmouseenter = mediaElementContainer.onmousedown = function() {
+        mediaElementContainer.onmouseenter = mediaElementContainer.onmousedown = function () {
             adjustControls();
             mediaControls.style.opacity = 1;
         };
 
-        mediaElementContainer.onmouseleave = function() {
+        mediaElementContainer.onmouseleave = function () {
             mediaControls.style.opacity = 0;
         };
     } else {
-        setTimeout(function() {
+        setTimeout(function () {
             adjustControls();
-            setTimeout(function() {
+            setTimeout(function () {
                 mediaControls.style.opacity = 1;
             }, 300);
         }, 700);
@@ -491,7 +491,7 @@ function getAudioElement(mediaElement, config) {
 
     adjustControls();
 
-    mediaElementContainer.toggle = function(clasName) {
+    mediaElementContainer.toggle = function (clasName) {
         if (typeof clasName != 'string') {
             for (var i = 0; i < clasName.length; i++) {
                 mediaElementContainer.toggle(clasName[i]);
@@ -510,3 +510,4 @@ function getAudioElement(mediaElement, config) {
 
     return mediaElementContainer;
 }
+export { getHTMLMediaElement };

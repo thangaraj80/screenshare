@@ -1,21 +1,20 @@
-<h1>
+<p>
   Screen Sharing using RTCMultiConnection
-  <p class="no-mobile">
-    Multi-user (one-to-many) screen sharing using star topology.
-  </p>
-</h1>
+
+<p>
+
 <section class="make-center">
   <input type="text" id="roomid" #roomid value="abcdef" autocorrect=off autocapitalize=off size=20>
-  <button id="open-room" (click)="openRoom()">Open Room</button>
+  <button id="open-room" (click)="openRoom($event)">Open Room</button>
   <button id="join-room" (click)="joinRoom()">Join Room</button>
   <button id="open-or-join-room" (click)="openRjoinRoom()">Auto Open Or Join Room</button>
 
-  <div id="videos-container" style="margin: 20px 0;"></div>
-
-  <div #roomurls id="roomurls"
-    style="text-align: center;display: none;background: #F1EDED;margin: 15px -10px;border: 1px solid rgb(189, 189, 189);border-left: 0;border-right: 0;">
-  </div>
+  <div id="videos-container" style="position:absolute; margin: 20px 0;"></div>
 </section>
+<div #roomurls id="roomurls"
+  style="text-align: center;display: none;background: #F1EDED;margin: 15px -10px;border: 1px solid rgb(189, 189, 189);border-left: 0;border-right: 0;">
+</div>
+
 <!-- <section class="make-center">
   <p style="margin: 0; padding: 0; padding-bottom: 20px;">
     <input type="text" id="room-id" value="abcdef" autocorrect=off autocapitalize=off size=20>
