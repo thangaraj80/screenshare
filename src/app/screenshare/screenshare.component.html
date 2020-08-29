@@ -1,17 +1,34 @@
+<h1>
+  Screen Sharing using RTCMultiConnection
+  <p class="no-mobile">
+    Multi-user (one-to-many) screen sharing using star topology.
+  </p>
+</h1>
+<section class="make-center">
+  <input type="text" id="roomid" #roomid value="abcdef" autocorrect=off autocapitalize=off size=20>
+  <button id="open-room" (click)="openRoom()">Open Room</button>
+  <button id="join-room" (click)="joinRoom()">Join Room</button>
+  <button id="open-or-join-room" (click)="openRjoinRoom()">Auto Open Or Join Room</button>
 
+  <div id="videos-container" style="margin: 20px 0;"></div>
 
-    <section id="logs-message" class="experiment" style="display: none;text-align: center;font-size: 1.5em;line-height: 2;color: red;">Screenshare</section>
+  <div #roomurls id="roomurls"
+    style="text-align: center;display: none;background: #F1EDED;margin: 15px -10px;border: 1px solid rgb(189, 189, 189);border-left: 0;border-right: 0;">
+  </div>
+</section>
+<!-- <section class="make-center">
+  <p style="margin: 0; padding: 0; padding-bottom: 20px;">
+    <input type="text" id="room-id" value="abcdef" autocorrect=off autocapitalize=off size=20>
+    <button id="open-room">Open Room</button>
+    <button id="join-room">Join Room</button>
+   <button id="share-screen" (click) = "btnShareScreen()" [disabled]="!shareBtnDisable">Share Your Screen</button> 
+    <button id="open-or-join-room">Auto Open Or Join Room</button>
+    
+    <div id="videos-container" style="margin: 20px 0;"></div>
+    
+    <div id="room-urls"
+      style="text-align: center;display: none;background: #F1EDED;margin: 15px -10px;border: 1px solid rgb(189, 189, 189);border-left: 0;border-right: 0;">
+    </div>
+  </p>
 
-    <!-- just copy this <section> and next script -->
-    <section class="experiment">
-        <section class="hide-after-join" style="text-align: center;">                    
-            <input type="text" id="room-name" placeholder="Enter " style="width: 80%; text-align: center; display: none;">
-            <button id="share-screen" class="setup">Share Your Screen</button>
-        </section>
-
-        <!-- local/remote videos container -->
-        <div id="videos-container"></div>
-
-        <div id="unique-token" style="display: block; text-align: center; padding: 20px;">sdsdsdsd</div>
-    </section>
-    <article>
+  <div id="videos-container" style="margin: 20px 0;"></div> -->

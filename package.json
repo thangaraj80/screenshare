@@ -22,9 +22,11 @@
     "@angular/platform-browser-dynamic": "~9.1.9",
     "@angular/router": "~9.1.9",
     "angular-cli-ghpages": "^0.6.2",
+    "detectrtc": "^1.4.1",
     "rxjs": "~6.5.4",
     "socket.io": "^2.3.0",
     "tslib": "^1.10.0",
+    "webrtc-adapter": "^7.7.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
